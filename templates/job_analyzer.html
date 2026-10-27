@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Job Description Parser{% endblock %}
+{% block page_title %}Job Description Analyzer{% endblock %}
+{% block page_subtitle %}Extract structured skills, core duties, and explicit vs inferred expectations{% endblock %}
+
+{% block content %}
+<div class="app-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">🔍 Paste Target Job Description</h3>
+      <p class="card-desc">Paste the complete job post below or load the Gokul Infocare sample assessment job.</p>
+    </div>
+    <button class="btn btn-secondary btn-sm" id="loadSampleJobBtn">✨ Load Sample Job Post</button>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="jobDescriptionInput">Job Description Text:</label>
+    <textarea class="form-control" id="jobDescriptionInput" rows="10" placeholder="Paste the job posting requirements, responsibilities, and qualifications here..."></textarea>
+  </div>
+
+  <div style="display: flex; justify-content: flex-end;">
+    <button class="btn btn-primary" id="analyzeJobBtn">
+      <span>Analyze Job Description</span>
+    </button>
+  </div>
+</div>
+
+<!-- Structured Analysis Results -->
+<div class="app-card" id="jobResultCard" style="display: none;">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">📊 Structured Job Requirements</h3>
+      <p class="card-desc" id="jobModeLabel">Analyzed requirements</p>
+    </div>
+    <button class="btn btn-primary btn-sm" id="sendJobToMatcherBtn">🎯 Send to Resume Matcher →</button>
+  </div>
+
+  <div class="form-grid-3" style="margin-bottom: 20px;">
+    <div style="background: #F8FAFC; border: 1px solid var(--border-light); padding: 14px; border-radius: var(--radius-md);">
+      <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Target Role</div>
+      <div style="font-size: 1.1rem; font-weight: 700; color: var(--navy-dark);" id="parsedJobTitle">-</div>
+    </div>
+    <div style="background: #F8FAFC; border: 1px solid var(--border-light); padding: 14px; border-radius: var(--radius-md);">
+      <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Company</div>
+      <div style="font-size: 1.1rem; font-weight: 700; color: var(--navy-dark);" id="parsedCompany">-</div>
+    </div>
+    <div style="background: #F8FAFC; border: 1px solid var(--border-light); padding: 14px; border-radius: var(--radius-md);">
+      <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Experience Level</div>
+      <div style="font-size: 1.1rem; font-weight: 700; color: var(--navy-dark);" id="parsedExpLevel">-</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--navy-dark);">
+      Explicitly Required Skills:
+    </h4>
+    <div class="tag-list" id="requiredSkillsContainer"></div>
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--navy-dark);">
+      Preferred / Nice-to-Have Skills:
+    </h4>
+    <div class="tag-list" id="preferredSkillsContainer"></div>
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--navy-dark);">
+      Core Responsibilities:
+    </h4>
+    <ul id="responsibilitiesList" style="padding-left: 20px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;"></ul>
+  </div>
+
+  <div style="background: #EFF6FF; border: 1px solid #DBEAFE; border-radius: var(--radius-md); padding: 16px;">
+    <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--blue-primary); margin-bottom: 6px;">
+      💡 Inferred Candidate Competencies (Implicit Expectations):
+    </h4>
+    <ul id="inferredList" style="padding-left: 20px; font-size: 0.84rem; color: #1E40AF; line-height: 1.5;"></ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/matching.js') }}"></script>
+{% endblock %}

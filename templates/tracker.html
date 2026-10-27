@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}Application Tracker{% endblock %}
+{% block page_title %}Job Application Tracker{% endblock %}
+{% block page_subtitle %}Manage and monitor your job hunt pipeline backed by persistent local SQLite storage{% endblock %}
+
+{% block content %}
+<!-- Tracker Statistics Summary -->
+<div class="dashboard-grid" style="margin-bottom: 24px;">
+  <div class="stat-card">
+    <div class="stat-info">
+      <div class="stat-label">Total Tracked</div>
+      <div class="stat-value" id="trackerTotal">{{ stats.total_applications }}</div>
+    </div>
+    <div class="stat-icon blue">📋</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-info">
+      <div class="stat-label">In Assessment</div>
+      <div class="stat-value" id="trackerAssessment">{{ stats.assessment }}</div>
+    </div>
+    <div class="stat-icon purple">⚡</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-info">
+      <div class="stat-label">Interviews</div>
+      <div class="stat-value" id="trackerInterview">{{ stats.interviews }}</div>
+    </div>
+    <div class="stat-icon amber">🗓️</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-info">
+      <div class="stat-label">Offers</div>
+      <div class="stat-value" id="trackerOffer">{{ stats.offers }}</div>
+    </div>
+    <div class="stat-icon green">🏆</div>
+  </div>
+</div>
+
+<div class="app-card">
+  <div class="card-header" style="flex-wrap: wrap; gap: 14px;">
+    <div>
+      <h3 class="card-title">📂 Application Pipeline</h3>
+      <p class="card-desc">Search, filter, edit, and keep track of every interview milestone.</p>
+    </div>
+    <button class="btn btn-primary btn-sm" id="openAddModalBtn">+ Add New Application</button>
+  </div>
+
+  <!-- Search and Filter Bar -->
+  <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 220px;">
+      <input type="text" class="form-control" id="trackerSearchInput" placeholder="🔍 Search by company, role, or notes...">
+    </div>
+    <div style="width: 200px;">
+      <select class="form-control" id="trackerStatusFilter">
+        <option value="">All Statuses</option>
+        {% for s in valid_statuses %}
+        <option value="{{ s }}">{{ s }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button class="btn btn-secondary btn-sm" id="resetFilterBtn">Reset</button>
+  </div>
+
+  <!-- Application Table -->
+  <div class="table-responsive">
+    <table class="data-table" id="applicationsTable">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Role</th>
+          <th>Application Date</th>
+          <th>Status</th>
+          <th>Job Link</th>
+          <th>Notes</th>
+          <th style="text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="applicationsTableBody">
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 24px; color: var(--text-muted);">
+            Loading applications from SQLite database...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Local SQLite Privacy Notice -->
+  <div class="privacy-alert" style="margin-top: 20px;">
+    <span>🛡️</span>
+    <div>
+      <strong>Local Data Sovereignty Notice:</strong> All application records, URLs, and notes are stored strictly inside your local SQLite database file (<code>database/job_tracker.db</code>). No application data is synced to cloud servers or third-party marketing services.
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit Modal -->
+<div class="modal-overlay" id="appModalOverlay">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add Job Application</h3>
+      <button class="modal-close" id="modalCloseBtn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="modalAppId">
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="modalCompany">Company Name: <span style="color: #DC2626;">*</span></label>
+          <input type="text" class="form-control" id="modalCompany" placeholder="e.g. Gokul Infocare" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="modalRole">Role Title: <span style="color: #DC2626;">*</span></label>
+          <input type="text" class="form-control" id="modalRole" placeholder="e.g. AI Associate" required>
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label" for="modalDate">Application Date: <span style="color: #DC2626;">*</span></label>
+          <input type="date" class="form-control" id="modalDate" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="modalStatus">Current Status: <span style="color: #DC2626;">*</span></label>
+          <select class="form-control" id="modalStatus" required>
+            {% for s in valid_statuses %}
+            <option value="{{ s }}">{{ s }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="modalLink">Job Posting URL (Optional):</label>
+        <input type="url" class="form-control" id="modalLink" placeholder="https://...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="modalNotes">Personal Notes / Next Steps:</label>
+        <textarea class="form-control" id="modalNotes" rows="3" placeholder="e.g. Followed up on LinkedIn with recruiter; round 1 scheduled."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="modalCancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="modalSaveBtn">Save Application</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" id="deleteModalOverlay">
+  <div class="modal-container" style="max-width: 440px;">
+    <div class="modal-header">
+      <h3>Confirm Deletion</h3>
+      <button class="modal-close" id="deleteModalCloseBtn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size: 0.92rem; color: var(--text-secondary);">
+        Are you sure you want to permanently delete this application for <strong id="deleteTargetName">this role</strong>?
+      </p>
+      <p style="font-size: 0.78rem; color: #DC2626; margin-top: 8px;">
+        This action cannot be undone.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="deleteCancelBtn">Cancel</button>
+      <button class="btn btn-danger" id="deleteConfirmBtn">Delete Permanently</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tracker.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Analyzer{% endblock %}
+{% block page_title %}Resume Upload & Text Extraction{% endblock %}
+{% block page_subtitle %}Extract, inspect, and validate your PDF resume with zero permanent storage{% endblock %}
+
+{% block content %}
+<div class="app-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">📄 Upload PDF Resume</h3>
+      <p class="card-desc">Accepts PDF files up to 5MB. Processing occurs in-memory with strict privacy guarantees.</p>
+    </div>
+  </div>
+
+  <!-- Drag and drop zone -->
+  <div class="dropzone" id="resumeDropzone">
+    <input type="file" id="resumeFileInput" accept=".pdf" style="display: none;">
+    <div class="dropzone-icon">📥</div>
+    <div class="dropzone-title">Click to upload or drag & drop your resume PDF</div>
+    <div class="dropzone-subtitle">Supported format: PDF only (Max: 5MB)</div>
+  </div>
+
+  <!-- Privacy Notice -->
+  <div class="privacy-alert">
+    <span>🛡️</span>
+    <div>
+      <strong>Zero Permanent Storage Guarantee:</strong> Uploaded resumes are read ephemerally in memory to extract text and are immediately deleted. Your personal data is never stored on disk or shared with external parties without your explicit prompt submission.
+    </div>
+  </div>
+</div>
+
+<!-- Extracted Text Display Area -->
+<div class="app-card" id="extractionResultCard" style="display: none;">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">📝 Extracted Resume Content</h3>
+      <p class="card-desc" id="resumeMetaText">Review the extracted text below.</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button class="btn btn-secondary btn-sm" id="copyResumeTextBtn">📋 Copy Text</button>
+      <button class="btn btn-primary btn-sm" id="useInMatcherBtn">🎯 Send to Job Matcher →</button>
+    </div>
+  </div>
+
+  <!-- Scanned PDF Warning Banner -->
+  <div id="scannedWarningBanner" class="privacy-alert privacy-alert-warning" style="display: none; margin-bottom: 16px;">
+    <span>⚠️</span>
+    <div id="scannedWarningMessage">
+      Warning: Minimal text extracted. This PDF may be a scanned image or flattening.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="extractedResumeTextarea">Extracted Text (Editable for Corrections):</label>
+    <textarea class="form-control" id="extractedResumeTextarea" rows="14" placeholder="Extracted text will appear here..."></textarea>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted);">
+    <div>Character count: <span id="charCountSpan">0</span> | Word count: <span id="wordCountSpan">0</span></div>
+    <div>Ready to proceed with matching or cover letter generation.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/resume.js') }}"></script>
+{% endblock %}

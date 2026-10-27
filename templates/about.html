@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}About & Privacy{% endblock %}
+{% block page_title %}About the Project & Privacy Commitments{% endblock %}
+{% block page_subtitle %}Architecture, ethical AI policies, and assessment details for Gokul Infocare{% endblock %}
+
+{% block content %}
+<div class="app-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">🛡️ Assessment Overview</h3>
+      <p class="card-desc">Created for the Gokul Infocare AI Growth & Automation Associate practical evaluation</p>
+    </div>
+  </div>
+
+  <div style="font-size: 0.9rem; line-height: 1.7; color: var(--text-secondary);">
+    <p style="margin-bottom: 14px;">
+      The <strong>AI Job Application Assistant</strong> is an end-to-end, full-stack career automation platform tailored specifically for fresh graduates and early-career job seekers.
+      Rather than a static UI or toy wrapper, it delivers robust backend workflows, mathematical transparency, non-hallucinatory document customization, and local SQLite data sovereignty.
+    </p>
+
+    <div class="form-grid-3" style="margin: 20px 0;">
+      <div style="background: #F8FAFC; border: 1px solid var(--border-light); padding: 18px; border-radius: var(--radius-md);">
+        <h4 style="color: var(--navy-dark); font-size: 0.95rem; font-weight: 700; margin-bottom: 6px;">1. Full-Stack Foundation</h4>
+        <p style="font-size: 0.82rem;">Python 3, Flask, SQLite with parameterized queries, pypdf text parsing, and responsive CSS/Vanilla JS.</p>
+      </div>
+
+      <div style="background: #F8FAFC; border: 1px solid var(--border-light); padding: 18px; border-radius: var(--radius-md);">
+        <h4 style="color: var(--navy-dark); font-size: 0.95rem; font-weight: 700; margin-bottom: 6px;">2. Transparent Scoring</h4>
+        <p style="font-size: 0.82rem;">Calculated skill coverage formula ($75\%$ required + $25\%$ preferred) explicitly labeled as an alignment tool, never a hiring guarantee.</p>
+      </div>
+
+      <div style="background: #F8FAFC; border: 1px solid var(--border-light); padding: 18px; border-radius: var(--radius-md);">
+        <h4 style="color: var(--navy-dark); font-size: 0.95rem; font-weight: 700; margin-bottom: 6px;">3. Ethical AI Guardrails</h4>
+        <p style="font-size: 0.82rem;">Zero fabrication directives, sandboxed XML delimiter defenses, and a verifiable offline deterministic Demo Mode.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Policy & Data Sovereignty -->
+<div class="app-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">🔒 Privacy & Data Retention Policy</h3>
+      <p class="card-desc">Clear commitments regarding personal resumes and application tracking data</p>
+    </div>
+  </div>
+
+  <div style="font-size: 0.88rem; line-height: 1.7; color: var(--text-secondary);">
+    <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 10px;">
+      <li>
+        <strong>Zero Permanent Resume Retention:</strong> When you upload a PDF resume, the text is extracted in-memory using <code>pypdf</code>. The temporary file is immediately scrubbed and deleted from the operating system upon extraction.
+      </li>
+      <li>
+        <strong>Local SQLite Data Sovereignty:</strong> All tracked job applications, URLs, statuses, and notes are stored strictly in your local SQLite database file at <code>database/job_tracker.db</code>. No application data is synced to external telemetry or third-party cloud trackers.
+      </li>
+      <li>
+        <strong>Explicit AI Consent & Provider Notice:</strong> Resumes and job descriptions are never sent to third-party AI APIs without explicit user action (clicking Generate/Analyze). In Demo Mode, all analysis executes 100% locally on your machine without external network calls.
+      </li>
+      <li>
+        <strong>API Key Security:</strong> Provider keys (such as <code>GEMINI_API_KEY</code>) reside only in your local <code>.env</code> file, are read server-side, and are never sent to the browser or committed to version control.
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- System Architecture Diagram -->
+<div class="app-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">🏗️ System Architecture & Workflow</h3>
+      <p class="card-desc">End-to-end data flow between client, server, SQLite, and AI provider</p>
+    </div>
+  </div>
+
+  <div style="background: #F8FAFC; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 20px; font-family: monospace; font-size: 0.82rem; line-height: 1.7; color: var(--navy-dark); overflow-x: auto;">
+[Frontend: HTML5 + Vanilla JS + CSS3]
+       │  (Fetch API with JSON / FormData)
+       ▼
+[Flask Backend Routes (app.py)]
+       ├── /api/resume/upload ──────> [pypdf (Ephemeral Text Extraction & Immediate Cleanup)]
+       ├── /api/matching/analyze ───> [matching_service.py (Mathematical Skill Formula)]
+       ├── /api/cover-letter/gen ───> [cover_letter_service.py (Grounded Non-Hallucinatory Tone Engine)]
+       ├── /api/interview/prep ─────> [interview_service.py (STAR Models & Practice Evaluator)]
+       ├── /api/applications ───────> [database/db.py (SQLite Parameterized CRUD & Stats)]
+       └── /api/prompts/live ───────> [services/prompt_templates.py (Live Introspection)]
+                                               │
+                                    ┌──────────┴──────────┐
+                                    ▼                     ▼
+                       [Live AI: Google Gemini]    [Demo Mode: Deterministic Engine]
+                       (Official google-genai SDK)  (100% Offline Rule/Taxonomy Engine)
+  </div>
+</div>
+{% endblock %}

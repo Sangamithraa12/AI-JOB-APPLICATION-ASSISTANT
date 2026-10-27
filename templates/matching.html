@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Resume-to-Job Matcher & ATS{% endblock %}
+{% block page_title %}Resume Matcher & ATS Optimizer{% endblock %}
+{% block page_subtitle %}Evaluate skill coverage with transparent mathematics and grounded non-hallucinatory suggestions{% endblock %}
+
+{% block content %}
+<div class="app-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">🎯 Compare Resume & Job Description</h3>
+      <p class="card-desc">Review your resume text and target job description side-by-side.</p>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn btn-secondary btn-sm" id="loadSampleMatchingDataBtn">✨ Load Sample Profile & Role</button>
+    </div>
+  </div>
+
+  <div class="form-grid-2">
+    <div class="form-group">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <label class="form-label" for="matchResumeInput" style="margin: 0;">Resume Text:</label>
+        <span style="font-size: 0.75rem; color: var(--text-muted);" id="matchResumeCharCount">0 chars</span>
+      </div>
+      <textarea class="form-control" id="matchResumeInput" rows="9" placeholder="Paste resume text or upload from the Resume Analyzer page..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <label class="form-label" for="matchJobInput" style="margin: 0;">Job Description:</label>
+        <span style="font-size: 0.75rem; color: var(--text-muted);" id="matchJobCharCount">0 chars</span>
+      </div>
+      <textarea class="form-control" id="matchJobInput" rows="9" placeholder="Paste target job description or send from Job Analyzer page..."></textarea>
+    </div>
+  </div>
+
+  <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
+    <button class="btn btn-primary" id="runMatchBtn">
+      <span>Analyze Match & Suggest ATS Improvements</span>
+    </button>
+  </div>
+</div>
+
+<!-- Match Results & Transparent Calculation -->
+<div class="app-card" id="matchResultsCard" style="display: none;">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">📈 Alignment Analysis & Breakdown</h3>
+      <p class="card-desc" id="matchModeLabel">Analysis results</p>
+    </div>
+  </div>
+
+  <!-- Transparent Score Box -->
+  <div class="score-box">
+    <div class="score-circle">
+      <div class="number" id="matchScoreNum">0%</div>
+      <div class="label">Match Score</div>
+    </div>
+    <div class="score-details" style="flex: 1;">
+      <h4 id="scoreTitle">Alignment Assessment</h4>
+      <p id="scoreExplanationText" style="line-height: 1.5; margin-bottom: 8px;">Explanation will appear here.</p>
+      <div class="score-disclaimer" id="scoreDisclaimerText">
+        <strong>Transparency & Ethical AI Notice:</strong> This score represents lexical and contextual skill overlap between your resume text and the job posting. It is an editorial alignment tool, NOT a hiring guarantee or probability.
+      </div>
+    </div>
+  </div>
+
+  <!-- Skills Breakdown Grid -->
+  <div class="form-grid-2" style="margin-bottom: 24px;">
+    <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: var(--radius-md); padding: 18px;">
+      <h4 style="font-size: 0.92rem; font-weight: 700; color: #166534; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+        <span>✅ Matching Skills (Genuinely Supported):</span>
+      </h4>
+      <div class="tag-list" id="matchingSkillsList"></div>
+    </div>
+
+    <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: var(--radius-md); padding: 18px;">
+      <h4 style="font-size: 0.92rem; font-weight: 700; color: #991B1B; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+        <span>⚠️ Missing Target Skills:</span>
+      </h4>
+      <div class="tag-list" id="missingSkillsList"></div>
+    </div>
+  </div>
+
+  <!-- Experience Alignment Summary -->
+  <div style="background: #F8FAFC; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 16px; margin-bottom: 24px;">
+    <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--navy-dark); margin-bottom: 6px;">
+      📌 Experience Alignment Summary:
+    </h4>
+    <p id="experienceAlignmentText" style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.6;">-</p>
+  </div>
+
+  <!-- Non-Hallucinatory ATS Improvement Opportunities -->
+  <div>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+      <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--navy-dark);">
+        ✨ Actionable ATS Improvement Opportunities
+      </h4>
+      <span style="font-size: 0.76rem; background: #EFF6FF; color: var(--blue-primary); padding: 3px 8px; border-radius: var(--radius-full); font-weight: 600;">
+        Zero-Fabrication Guardrail Active
+      </span>
+    </div>
+
+    <div id="improvementsContainer" style="display: flex; flex-direction: column; gap: 14px;"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/matching.js') }}"></script>
+{% endblock %}

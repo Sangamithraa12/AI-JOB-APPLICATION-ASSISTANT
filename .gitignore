@@ -1,0 +1,33 @@
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+
+# Python cache & compiled bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local Environment Variables & Secrets
+# Exclude ALL .env variants; only keep .env.example as a safe template
+.env
+.env.*
+!.env.example
+
+# Ephemeral uploads & local database
+uploads/*
+!uploads/.gitkeep
+database/*.db
+database/*.db-journal
+
+# Operating System & Editor configs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.sublime-*

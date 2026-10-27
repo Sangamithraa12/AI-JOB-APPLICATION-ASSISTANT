@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Job Application Assistant Dashboard{% endblock %}
+{% block page_subtitle %}Live tracking metrics and AI-driven career automation suite{% endblock %}
+
+{% block content %}
+<!-- Metric Stat Cards Calculated from SQLite Database -->
+<div class="dashboard-grid">
+  <div class="stat-card">
+    <div class="stat-info">
+      <div class="stat-label">Total Applications</div>
+      <div class="stat-value" id="statTotal">{{ stats.total_applications }}</div>
+      <div class="stat-subtext">Tracked locally in SQLite</div>
+    </div>
+    <div class="stat-icon blue">📁</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-info">
+      <div class="stat-label">Interviews Scheduled</div>
+      <div class="stat-value" id="statInterviews">{{ stats.interviews }}</div>
+      <div class="stat-subtext">{{ stats.interview_rate }}% interview rate</div>
+    </div>
+    <div class="stat-icon amber">🗓️</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-info">
+      <div class="stat-label">Offers Received</div>
+      <div class="stat-value" id="statOffers">{{ stats.offers }}</div>
+      <div class="stat-subtext">{{ stats.offer_rate }}% conversion rate</div>
+    </div>
+    <div class="stat-icon green">🎉</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-info">
+      <div class="stat-label">Active Assessments</div>
+      <div class="stat-value" id="statAssessment">{{ stats.assessment }}</div>
+      <div class="stat-subtext">Technical & practical tests</div>
+    </div>
+    <div class="stat-icon purple">⚡</div>
+  </div>
+</div>
+
+<!-- Quick Action Feature Grid -->
+<div class="app-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">🚀 Career Workflow Tools</h3>
+      <p class="card-desc">Jump straight into optimizing your application materials with transparent AI</p>
+    </div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+    <a href="{{ url_for('resume_analyzer_page') }}" style="text-decoration: none; color: inherit;">
+      <div style="padding: 18px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: #F8FAFC; transition: var(--transition);" onmouseover="this.style.borderColor='var(--blue-primary)'" onmouseout="this.style.borderColor='var(--border-light)'">
+        <div style="font-size: 1.5rem; margin-bottom: 8px;">📄</div>
+        <h4 style="font-size: 0.98rem; font-weight: 700; color: var(--navy-dark); margin-bottom: 4px;">1. Extract & Analyze Resume</h4>
+        <p style="font-size: 0.82rem; color: var(--text-secondary);">Upload PDF resume, inspect extracted text, and detect scanned or unreadable elements securely.</p>
+      </div>
+    </a>
+
+    <a href="{{ url_for('matching_page') }}" style="text-decoration: none; color: inherit;">
+      <div style="padding: 18px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: #F8FAFC; transition: var(--transition);" onmouseover="this.style.borderColor='var(--blue-primary)'" onmouseout="this.style.borderColor='var(--border-light)'">
+        <div style="font-size: 1.5rem; margin-bottom: 8px;">🎯</div>
+        <h4 style="font-size: 0.98rem; font-weight: 700; color: var(--navy-dark); margin-bottom: 4px;">2. Match with Job Description</h4>
+        <p style="font-size: 0.82rem; color: var(--text-secondary);">Calculate a transparent match score, uncover skill gaps, and get grounded ATS bullet improvements.</p>
+      </div>
+    </a>
+
+    <a href="{{ url_for('cover_letter_page') }}" style="text-decoration: none; color: inherit;">
+      <div style="padding: 18px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: #F8FAFC; transition: var(--transition);" onmouseover="this.style.borderColor='var(--blue-primary)'" onmouseout="this.style.borderColor='var(--border-light)'">
+        <div style="font-size: 1.5rem; margin-bottom: 8px;">✍️</div>
+        <h4 style="font-size: 0.98rem; font-weight: 700; color: var(--navy-dark); margin-bottom: 4px;">3. Tailor Cover Letter</h4>
+        <p style="font-size: 0.82rem; color: var(--text-secondary);">Generate customized letters in Professional, Enthusiastic, or Confident tones without hallucination.</p>
+      </div>
+    </a>
+
+    <a href="{{ url_for('interview_prep_page') }}" style="text-decoration: none; color: inherit;">
+      <div style="padding: 18px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: #F8FAFC; transition: var(--transition);" onmouseover="this.style.borderColor='var(--blue-primary)'" onmouseout="this.style.borderColor='var(--border-light)'">
+        <div style="font-size: 1.5rem; margin-bottom: 8px;">💡</div>
+        <h4 style="font-size: 0.98rem; font-weight: 700; color: var(--navy-dark); margin-bottom: 4px;">4. Practice Interview Questions</h4>
+        <p style="font-size: 0.82rem; color: var(--text-secondary);">Prepare for Technical & HR questions with grounded STAR models and real-time answer evaluation.</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- Recently Added Applications Table -->
+<div class="app-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">🕒 Recently Added Applications</h3>
+      <p class="card-desc">Latest entries from your local SQLite database</p>
+    </div>
+    <a href="{{ url_for('tracker_page') }}" class="btn btn-secondary btn-sm">View All in Tracker →</a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Role</th>
+          <th>Date Applied</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if stats.recent_applications %}
+          {% for app in stats.recent_applications %}
+          <tr>
+            <td><strong>{{ app.company }}</strong></td>
+            <td>{{ app.role }}</td>
+            <td>{{ app.application_date }}</td>
+            <td>
+              <span class="status-badge {{ app.status }}">{{ app.status }}</span>
+            </td>
+            <td>
+              <a href="{{ url_for('tracker_page') }}" class="btn btn-secondary btn-sm">Manage</a>
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">
+              No applications tracked yet. Click "Application Tracker" to add your first role.
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Assessment & Prompt Engineering Highlight -->
+<div style="background: linear-gradient(135deg, #0B132B, #1C2541); color: #fff; border-radius: var(--radius-lg); padding: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+  <div style="max-width: 680px;">
+    <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; color: #60A5FA;">Gokul Infocare Assessment Showcase</h3>
+    <p style="font-size: 0.85rem; color: #CBD5E1; line-height: 1.5;">
+      Demonstrating practical AI prompt engineering, transparent deterministic fallback, strict zero-hallucination guardrails, and persistent SQLite tracking for the AI Growth & Automation Associate role.
+    </p>
+  </div>
+  <a href="{{ url_for('prompt_showcase_page') }}" class="btn btn-primary" style="background: #2563EB; border: none; white-space: nowrap;">
+    Inspect AI Prompts & Showcase →
+  </a>
+</div>
+{% endblock %}

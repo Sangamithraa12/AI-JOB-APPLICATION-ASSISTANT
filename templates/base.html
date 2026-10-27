@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}AI Job Application Assistant{% endblock %} | Gokul Infocare</title>
+  <meta name="description" content="AI Job Application Assistant built for Gokul Infocare practical assessment. Optimize resumes, tailor cover letters, and track applications with transparent AI.">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+    code, pre { font-family: 'JetBrains Mono', monospace; }
+  </style>
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="appSidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>AI Job Assistant</h1>
+          <div class="brand-subtitle">Gokul Infocare Edition</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Overview</div>
+        <a href="{{ url_for('index') }}" class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+
+        <div class="nav-section-title">Analysis & Matching</div>
+        <a href="{{ url_for('resume_analyzer_page') }}" class="nav-item {% if active_page == 'resume_analyzer' %}active{% endif %}">
+          <span class="nav-icon">📄</span>
+          <span>Resume Analyzer</span>
+        </a>
+        <a href="{{ url_for('job_analyzer_page') }}" class="nav-item {% if active_page == 'job_analyzer' %}active{% endif %}">
+          <span class="nav-icon">🔍</span>
+          <span>Job Description Parser</span>
+        </a>
+        <a href="{{ url_for('matching_page') }}" class="nav-item {% if active_page == 'matching' %}active{% endif %}">
+          <span class="nav-icon">🎯</span>
+          <span>Resume Matcher & ATS</span>
+        </a>
+
+        <div class="nav-section-title">Generation Tools</div>
+        <a href="{{ url_for('cover_letter_page') }}" class="nav-item {% if active_page == 'cover_letter' %}active{% endif %}">
+          <span class="nav-icon">✍️</span>
+          <span>Cover Letter Generator</span>
+        </a>
+        <a href="{{ url_for('recruiter_messages_page') }}" class="nav-item {% if active_page == 'recruiter_messages' %}active{% endif %}">
+          <span class="nav-icon">💬</span>
+          <span>Recruiter Outreach</span>
+        </a>
+        <a href="{{ url_for('interview_prep_page') }}" class="nav-item {% if active_page == 'interview_prep' %}active{% endif %}">
+          <span class="nav-icon">💡</span>
+          <span>Interview Prep & Practice</span>
+        </a>
+
+        <div class="nav-section-title">Management & Insights</div>
+        <a href="{{ url_for('tracker_page') }}" class="nav-item {% if active_page == 'tracker' %}active{% endif %}">
+          <span class="nav-icon">📋</span>
+          <span>Application Tracker</span>
+        </a>
+        <a href="{{ url_for('prompt_showcase_page') }}" class="nav-item {% if active_page == 'prompt_showcase' %}active{% endif %}">
+          <span class="nav-icon">🔬</span>
+          <span>Prompt Engineering</span>
+        </a>
+        <a href="{{ url_for('about_page') }}" class="nav-item {% if active_page == 'about' %}active{% endif %}">
+          <span class="nav-icon">🛡️</span>
+          <span>About & Privacy</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="assessment-badge">
+          <strong>Gokul Infocare Assessment</strong>
+          <span>AI Growth & Automation Associate</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobileMenuToggle" aria-label="Toggle Navigation Menu">☰</button>
+          <div class="header-title-wrap">
+            <h2>{% block page_title %}Dashboard{% endblock %}</h2>
+            <p>{% block page_subtitle %}Manage your applications, analyze resumes, and prepare for interviews.{% endblock %}</p>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- AI Provider Status Pill -->
+          <div id="aiStatusPill" class="ai-status-pill {% if ai_status.is_live_ai %}live{% else %}demo{% endif %}"
+               title="{{ ai_status.notice }}">
+            <span class="status-dot"></span>
+            <span id="aiStatusText">
+              {% if ai_status.is_live_ai %}
+                Live AI: {{ ai_status.model }}
+              {% else %}
+                Demo Mode (Rule-Based)
+              {% endif %}
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <main class="content-body">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Global JavaScript -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

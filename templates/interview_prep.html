@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Interview Preparation & Practice{% endblock %}
+{% block page_title %}Interview Preparation & Interactive Practice{% endblock %}
+{% block page_subtitle %}Master technical, behavioral, and project questions grounded in your resume with real-time answer scoring{% endblock %}
+
+{% block content %}
+<div class="app-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">💡 Role & Candidate Context</h3>
+      <p class="card-desc">Questions and model answers will be grounded strictly in these inputs.</p>
+    </div>
+    <button class="btn btn-secondary btn-sm" id="loadSampleInterviewBtn">✨ Load Sample Profile & Role</button>
+  </div>
+
+  <div class="form-grid-2">
+    <div class="form-group">
+      <label class="form-label" for="intResumeInput">Candidate Resume Text (Optional but recommended):</label>
+      <textarea class="form-control" id="intResumeInput" rows="6" placeholder="Paste your resume to anchor answers to your authentic projects..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="intJobInput">Target Job Description: <span style="color: #DC2626;">*</span></label>
+      <textarea class="form-control" id="intJobInput" rows="6" placeholder="Paste the job description to extract relevant technical and behavioral topics..."></textarea>
+    </div>
+  </div>
+
+  <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+    <button class="btn btn-primary" id="generateInterviewBtn">
+      <span>Generate Interview Questions & Answers</span>
+    </button>
+  </div>
+</div>
+
+<!-- Questions Container -->
+<div class="app-card" id="intQuestionsCard" style="display: none;">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">🎯 Tailored Interview Questions (6 Core Scenarios)</h3>
+      <p class="card-desc" id="intModeLabel">Generated preparation pack</p>
+    </div>
+  </div>
+
+  <div id="questionsAccordion" style="display: flex; flex-direction: column; gap: 16px;"></div>
+</div>
+
+<!-- Interactive Practice Mode Sandbox -->
+<div class="app-card" id="practiceSandboxCard" style="margin-top: 24px;">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">🎙️ Candidate Practice Mode Sandbox</h3>
+      <p class="card-desc">Practice answering an interview question and receive instant evaluation, strengths, and areas for improvement.</p>
+    </div>
+  </div>
+
+  <div class="form-grid-2">
+    <div class="form-group">
+      <label class="form-label" for="practiceRoleInput">Target Role:</label>
+      <input type="text" class="form-control" id="practiceRoleInput" value="AI Growth & Automation Associate">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="practiceQuestionInput">Interview Question to Practice:</label>
+      <input type="text" class="form-control" id="practiceQuestionInput" value="How do you handle unhandled errors, rate limits, and network timeouts when automating API workflows?">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="candidateAnswerInput">Your Answer (Type or dictate your response):</label>
+    <textarea class="form-control" id="candidateAnswerInput" rows="5" placeholder="Type your answer using the STAR method (Situation, Task, Action, Result)..."></textarea>
+  </div>
+
+  <div style="display: flex; justify-content: flex-end;">
+    <button class="btn btn-primary" id="evaluateAnswerBtn">
+      <span>Evaluate My Answer & Get Feedback</span>
+    </button>
+  </div>
+
+  <!-- Evaluation Feedback Box -->
+  <div id="evaluationFeedbackCard" style="display: none; margin-top: 20px; background: #F8FAFC; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 20px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 10px;">
+      <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--navy-dark);">
+        Coach Evaluation: <span id="evalRatingBadge" class="status-badge" style="margin-left: 8px;">Strong</span>
+      </h4>
+      <div style="font-size: 1.1rem; font-weight: 800; color: var(--blue-primary);" id="evalScoreText">Score: 85/100</div>
+    </div>
+
+    <div class="form-grid-2" style="margin-bottom: 16px;">
+      <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: var(--radius-md); padding: 14px;">
+        <h5 style="color: #065F46; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">💪 Strengths:</h5>
+        <ul id="evalStrengthsList" style="padding-left: 18px; font-size: 0.82rem; color: #047857; line-height: 1.5;"></ul>
+      </div>
+
+      <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: var(--radius-md); padding: 14px;">
+        <h5 style="color: #92400E; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">🎯 Improvement Opportunities:</h5>
+        <ul id="evalImprovementsList" style="padding-left: 18px; font-size: 0.82rem; color: #B45309; line-height: 1.5;"></ul>
+      </div>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 16px;">
+      <h5 style="font-size: 0.88rem; font-weight: 700; color: var(--navy-dark); margin-bottom: 6px;">
+        💡 Enhanced STAR Model Answer (Same Experience, Stronger Delivery):
+      </h5>
+      <p id="evalModelAnswerText" style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;"></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+{% endblock %}

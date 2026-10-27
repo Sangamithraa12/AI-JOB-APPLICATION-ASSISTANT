@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Recruiter Outreach Generator{% endblock %}
+{% block page_title %}Recruiter Message & InMail Generator{% endblock %}
+{% block page_subtitle %}High-impact, concise messages for 5 essential job search networking situations{% endblock %}
+
+{% block content %}
+<div class="app-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">💬 Message Context & Purpose</h3>
+      <p class="card-desc">Select the communication scenario and tailor message parameters.</p>
+    </div>
+    <button class="btn btn-secondary btn-sm" id="loadSampleRecruiterBtn">✨ Load Sample Context</button>
+  </div>
+
+  <div class="form-grid-2">
+    <div class="form-group">
+      <label class="form-label" for="msgTypeSelect">Communication Scenario: <span style="color: #DC2626;">*</span></label>
+      <select class="form-control" id="msgTypeSelect">
+        <option value="Application Follow-up" selected>Application Follow-up</option>
+        <option value="Cold Outreach / Inquiring About Openings">Cold Outreach / Inquiring About Openings</option>
+        <option value="Employee Referral Request">Employee Referral Request</option>
+        <option value="Recruiter Outreach / InMail">Recruiter Outreach / InMail</option>
+        <option value="Interview Availability & Rescheduling">Interview Availability & Rescheduling</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="msgToneSelect">Tone & Style:</label>
+      <select class="form-control" id="msgToneSelect">
+        <option value="Professional & Polite" selected>Professional & Polite</option>
+        <option value="Warm & Approachable">Warm & Approachable</option>
+        <option value="Direct & Concise">Direct & Concise</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-grid-3">
+    <div class="form-group">
+      <label class="form-label" for="msgCompanyInput">Target Company: <span style="color: #DC2626;">*</span></label>
+      <input type="text" class="form-control" id="msgCompanyInput" placeholder="e.g., Gokul Infocare">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="msgRoleInput">Target Role: <span style="color: #DC2626;">*</span></label>
+      <input type="text" class="form-control" id="msgRoleInput" placeholder="e.g., AI Growth Associate">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="msgRecipientInput">Recipient Name (Optional):</label>
+      <input type="text" class="form-control" id="msgRecipientInput" placeholder="e.g., Sarah Jenkins or Hiring Team">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="msgNotesInput">Specific Availability or Extra Notes (Optional):</label>
+    <input type="text" class="form-control" id="msgNotesInput" placeholder="e.g., Available Tuesdays & Thursdays 2-5 PM EST, or met at Tech Career Fair">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="msgResumeInput">Candidate Resume / Core Skills (Optional, anchors authenticity):</label>
+    <textarea class="form-control" id="msgResumeInput" rows="4" placeholder="Paste your resume or list of skills to customize the pitch..."></textarea>
+  </div>
+
+  <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+    <button class="btn btn-primary" id="generateRecruiterMsgBtn">
+      <span>Generate Networking Message</span>
+    </button>
+  </div>
+</div>
+
+<!-- Message Output -->
+<div class="app-card" id="msgOutputCard" style="display: none;">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">📨 Generated Message (Ready to Send)</h3>
+      <p class="card-desc" id="msgModeLabel">Concise outreach</p>
+    </div>
+    <button class="btn btn-primary btn-sm" id="copyRecruiterMsgBtn">📋 Copy Message</button>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="msgSubjectOutput">Email Subject Line / LinkedIn Header:</label>
+    <input type="text" class="form-control" id="msgSubjectOutput" readonly style="background: #F8FAFC; font-weight: 600;">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="msgBodyOutput">Message Body:</label>
+    <textarea class="form-control" id="msgBodyOutput" rows="9" style="line-height: 1.6; font-size: 0.92rem;"></textarea>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/generator.js') }}"></script>
+{% endblock %}

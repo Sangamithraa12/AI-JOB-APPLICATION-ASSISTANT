@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Cover Letter Generator{% endblock %}
+{% block page_title %}Tailored Cover Letter Generator{% endblock %}
+{% block page_subtitle %}Craft authentic, role-aligned cover letters grounded strictly in your real background{% endblock %}
+
+{% block content %}
+<div class="app-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">✍️ Application Details & Persona</h3>
+      <p class="card-desc">Provide the target role details and choose your desired communication tone.</p>
+    </div>
+    <button class="btn btn-secondary btn-sm" id="loadSampleCoverLetterBtn">✨ Load Sample Inputs</button>
+  </div>
+
+  <div class="form-grid-3">
+    <div class="form-group">
+      <label class="form-label" for="clCompanyInput">Company Name: <span style="color: #DC2626;">*</span></label>
+      <input type="text" class="form-control" id="clCompanyInput" placeholder="e.g., Gokul Infocare">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="clRoleInput">Job Title: <span style="color: #DC2626;">*</span></label>
+      <input type="text" class="form-control" id="clRoleInput" placeholder="e.g., AI Growth & Automation Associate">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="clToneSelect">Communication Tone:</label>
+      <select class="form-control" id="clToneSelect">
+        <option value="Professional" selected>Professional & Formal</option>
+        <option value="Enthusiastic">Enthusiastic & High Energy</option>
+        <option value="Confident">Confident & Action-Oriented</option>
+        <option value="Direct">Direct & Concise</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-grid-2">
+    <div class="form-group">
+      <label class="form-label" for="clResumeInput">Resume Text: <span style="color: #DC2626;">*</span></label>
+      <textarea class="form-control" id="clResumeInput" rows="7" placeholder="Paste your resume text here..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="clJobInput">Job Description: <span style="color: #DC2626;">*</span></label>
+      <textarea class="form-control" id="clJobInput" rows="7" placeholder="Paste the job requirements and responsibilities here..."></textarea>
+    </div>
+  </div>
+
+  <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+    <button class="btn btn-primary" id="generateCoverLetterBtn">
+      <span>Generate Tailored Cover Letter</span>
+    </button>
+  </div>
+</div>
+
+<!-- Output Display & Editor -->
+<div class="app-card" id="clOutputCard" style="display: none;">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">📄 Generated Cover Letter (Editable)</h3>
+      <p class="card-desc" id="clModeLabel">Customized output</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button class="btn btn-secondary btn-sm" id="copyCoverLetterBtn">📋 Copy to Clipboard</button>
+      <button class="btn btn-primary btn-sm" id="downloadCoverLetterBtn">💾 Download as .txt</button>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <textarea class="form-control" id="clOutputTextarea" rows="16" style="line-height: 1.7; font-size: 0.92rem;"></textarea>
+  </div>
+
+  <div class="privacy-alert" style="background: #F8FAFC; border-color: var(--border-light); color: var(--text-secondary); margin-top: 10px;">
+    <span>🛡️</span>
+    <div>
+      <strong>Authenticity Guardrail:</strong> This letter was generated without fabricating metrics, positions, or qualifications not found in your provided resume. Please review and replace the placeholders (such as <code>[Your Name]</code>) before submitting.
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/generator.js') }}"></script>
+{% endblock %}
